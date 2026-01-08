@@ -1,0 +1,17 @@
+# Core AI and Agent Framework
+google-adk
+google-cloud-aiplatform
+
+# Connectivity and Protocol (For Azure DevOps & MCP)
+mcp[cli]
+python-dotenv
+
+# Data Processing (Requirements Analysis & Resource Forecasting)
+pandas
+openpyxl
+beautifulsoup4
+python-docx
+lxml
+
+# Optional: Framework for Automation Script Management
+playwright
