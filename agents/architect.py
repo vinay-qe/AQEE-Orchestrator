@@ -115,3 +115,69 @@ JSON with structure:
 - Propose additional acceptance criteria for comprehensiveness""",
     output_key="phase1_data"
 )
+
+
+def _call_agent(agent, payload):
+  """Call agent using preferred ADK signature `call(prompt, context)` then fall back.
+
+  Use `payload` as context and a short prompt when possible.
+  """
+  # Preferred explicit ADK signature
+  call_fn = getattr(agent, "call", None)
+  if callable(call_fn):
+    try:
+      prompt = payload.get("prompt") if isinstance(payload, dict) else str(payload)
+      return call_fn(prompt, payload)
+    except Exception as e:
+      return {"error": f"agent.call failed: {e}"}
+
+  # Fallback to other common methods
+  for method in ("run", "invoke", "execute", "respond", "get_response"):
+    fn = getattr(agent, method, None)
+    if callable(fn):
+      try:
+        return fn(payload)
+      except Exception as e:
+        return {"error": f"agent {method} failed: {e}"}
+
+  return {
+    "agent": getattr(agent, "name", str(agent)),
+    "note": "no callable method available; returned placeholder",
+    "instruction": getattr(agent, "instruction", None),
+    "input_received": payload,
+  }
+
+
+def delegate_architecture(input_data: dict) -> dict:
+  """Delegate requirement analysis and story creation to split architect agents.
+
+  Args:
+    input_data: dict containing raw requirements and context
+
+  Returns:
+    Aggregated result containing requirement summary, stories and ADO actions.
+  """
+  from agents.requirement_analyst import requirement_analyst
+  from agents.story_architect import story_architect
+  from agents.acceptance_criteria_manager import acceptance_criteria_manager
+  from agents.devops_linker import devops_linker
+
+  agg = {}
+  agg["requirements_summary"] = _call_agent(requirement_analyst, input_data)
+  agg["stories"] = _call_agent(story_architect, agg.get("requirements_summary") or input_data)
+  agg["criteria"] = _call_agent(acceptance_criteria_manager, agg.get("stories") or input_data)
+  agg["azure_actions"] = _call_agent(devops_linker, agg.get("stories") or input_data)
+
+  result = {
+    "requirements_summary": agg.get("requirements_summary"),
+    "stories": agg.get("stories"),
+    "criteria_validation": agg.get("criteria"),
+    "azure_actions": agg.get("azure_actions"),
+    "gaps_identified": [],
+  }
+
+  for k, v in agg.items():
+    if isinstance(v, dict) and v.get("error"):
+      result["gaps_identified"].append(f"{k}: {v.get('error')}")
+
+  return result
