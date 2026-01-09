@@ -10,3 +10,13 @@ from . import requirement_analyst
 from . import story_architect
 from . import acceptance_criteria_manager
 from . import devops_linker
+from . import testplan_designer
+from . import testcase_author
+from . import coverage_analyst
+from . import testdata_engineer
+from . import suite_organizer
+from . import ui_framework_designer
+from . import api_framework_designer
+from . import ci_cd_designer
+from . import execution_strategy_designer
+from . import environment_manager

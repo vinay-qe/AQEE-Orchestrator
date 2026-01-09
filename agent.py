@@ -13,6 +13,11 @@ from agents.architect import architect
 from agents.planner import planner
 from agents.designer import designer
 from agents.test_automation_designer import test_automation_designer
+from agents.ui_framework_designer import ui_framework_designer
+from agents.api_framework_designer import api_framework_designer
+from agents.ci_cd_designer import ci_cd_designer
+from agents.execution_strategy_designer import execution_strategy_designer
+from agents.environment_manager import environment_manager
 from agents.test_executor import test_executor
 from agents.report_generator import report_generator
 from agents.issue_tracker import issue_tracker
@@ -21,6 +26,11 @@ from agents.requirement_analyst import requirement_analyst
 from agents.story_architect import story_architect
 from agents.acceptance_criteria_manager import acceptance_criteria_manager
 from agents.devops_linker import devops_linker
+from agents.testplan_designer import testplan_designer
+from agents.testcase_author import testcase_author
+from agents.coverage_analyst import coverage_analyst
+from agents.testdata_engineer import testdata_engineer
+from agents.suite_organizer import suite_organizer
 
 # Import custom tools
 from qa_orchestrator.custom_functions import validate_phase_output
@@ -138,6 +148,16 @@ Your role is to coordinate the complete QA lifecycle by intelligently delegating
       acceptance_criteria_manager,
       devops_linker,
       architect,
+         testplan_designer,
+         testcase_author,
+         coverage_analyst,
+         testdata_engineer,
+         suite_organizer,
+         ui_framework_designer,
+         api_framework_designer,
+         ci_cd_designer,
+         execution_strategy_designer,
+         environment_manager,
         planner,
         designer,
         test_automation_designer,
