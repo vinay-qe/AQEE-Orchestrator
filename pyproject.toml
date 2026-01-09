@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aqee"
+version = "0.1.0"
+description = "AQEE - Agent QA Engineering Ecosystem. Multi-agent system for automated QA lifecycle management."
+authors = [{name = "QA Agent Team", email = "qa-agents@example.com"}]
+requires-python = ">=3.10"
+dependencies = [
+    "google-adk",
+    "google-cloud-aiplatform",
+    "mcp[cli]",
+    "python-dotenv",
+    "pandas",
+    "openpyxl",
+    "beautifulsoup4",
+    "python-docx",
+    "lxml",
+    "playwright",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=22.0",
+    "flake8>=4.0",
+]
+
+[tool.setuptools]
+packages = ["agents", "qa_orchestrator"]
+
+[tool.setuptools.package-data]
+qa_orchestrator = [".env"]

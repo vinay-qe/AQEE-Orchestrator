@@ -3,7 +3,7 @@ from google.adk.agents import LlmAgent
 
 planner = LlmAgent(
     name="Project_Planner",
-    model="gemini-2.0-flash",
+    model="gemini-3-flash",
     description="Plans project roadmap and resource allocation based on User Stories.",
     instruction="""Take User Stories from the Architect.
     1. Prioritize stories.
