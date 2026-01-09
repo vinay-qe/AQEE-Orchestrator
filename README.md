@@ -14,17 +14,18 @@ AQEE is an **autonomous AI-powered QA orchestration platform** that coordinates 
 
 ---
 
-## 🤖 The 7-Agent Team
+## 🤖 Agent Team (current)
 
-| Agent | Phase | Responsibility | Output |
-|-------|-------|-----------------|--------|
-| 🏗️ **Requirement_Architect** | 1 | Analyze requirements → Create User Stories | Stories, Acceptance Criteria |
-| 📋 **Project_Planner** | 2 | Plan QA → Resource allocation | Test Plans, Timelines |
-| ✅ **TestCase_Designer** | 3 | Design test cases → Coverage optimization | Test Suites, Scenarios |
-| 🧪 **Test_Executor** | 4 | Execute tests → Capture results | Results, Metrics |
-| 🐛 **Issue_Tracker** | 5 | Triage defects → Track lifecycle | Issues, Analysis |
-| 📊 **Report_Generator** | 6 | Create reports → Dashboards | Reports, KPIs |
-| 📈 **Resource_Planner** | 7 | Optimize resources → Effort estimates | Plans, Allocations |
+AQEE now uses a modular set of specialized agents. Heavy agents have been split into focused specialists; the orchestrator composes them as needed.
+
+Key agents (high level):
+- `Requirement_Analyst`, `Story_Architect`, `AcceptanceCriteria_Manager`, `DevOps_Linker` — requirements & story creation
+- `Project_Planner`, `Resource_Planner` — planning and resourcing
+- `TestPlan_Designer`, `TestCase_Author`, `Coverage_Analyst`, `TestData_Engineer`, `Suite_Organizer` — test design and coverage
+- `UI_Framework_Designer`, `API_Framework_Designer`, `CI_CD_Designer`, `Execution_Strategy_Designer`, `Environment_Manager` — automation & CI/CD design
+- `Test_Executor`, `Issue_Tracker`, `Report_Generator` — execution, defect management and reporting
+
+See the `agents/` folder for the full list of exported agents.
 
 ---
 
@@ -186,14 +187,29 @@ qa-agent-ecosystem/
 ├── README.md                         # 📖 This file
 │
 ├── agents/                           # 👥 Specialized agent team
-│   ├── architect.py                  # Phase 1: Requirements
-│   ├── planner.py                    # Phase 2: Planning
-│   ├── designer.py                   # Phase 3: Test Design
-│   ├── test_executor.py              # Phase 4: Test Execution
-│   ├── report_generator.py           # Phase 6: Reporting
-│   ├── issue_tracker.py              # Phase 5: Issue Management
-│   ├── resource_planner.py           # Phase 7: Resource Optimization
-│   └── __init__.py                   # Module initialization
+│   ├── architect.py                  # Legacy architect (compatibility)
+│   ├── requirement_analyst.py        # Requirement extraction & clarification
+│   ├── story_architect.py            # Story construction and templates
+│   ├── acceptance_criteria_manager.py# BDD criteria validation/normalization
+│   ├── devops_linker.py              # Azure DevOps payload/link suggestions
+│   ├── planner.py                    # Project planning
+│   ├── resource_planner.py           # Resource planning
+│   ├── testplan_designer.py          # High-level test plan authoring
+│   ├── testcase_author.py            # Test case authoring from GWT
+│   ├── coverage_analyst.py           # Coverage mapping & gap analysis
+│   ├── testdata_engineer.py          # Test data factories & fixtures
+│   ├── suite_organizer.py            # Suite grouping and CI mapping
+│   ├── test_automation_designer.py   # Legacy automation designer (compat)
+│   ├── ui_framework_designer.py      # UI automation framework design
+│   ├── api_framework_designer.py     # API automation framework design
+│   ├── ci_cd_designer.py             # CI/CD pipeline templates
+│   ├── execution_strategy_designer.py# Execution cadence and flakiness policy
+│   ├── environment_manager.py        # Environment provisioning & secrets
+│   ├── designer.py                   # Compatibility wrapper for test design
+│   ├── test_executor.py              # Test execution orchestrator
+│   ├── report_generator.py           # Reporting
+│   ├── issue_tracker.py              # Defect tracking
+│   └── __init__.py                   # Module initialization (exports)
 │
 └── qa_orchestrator/                  # 🛠️ Core utilities
     ├── agent.py                      # Legacy agent definitions
@@ -344,17 +360,34 @@ All agents ← Gemini 3 Flash AI Models
 
 Expected output:
 ```
+Expected output (example):
+```
+Missing credentials: google_api_key, azure_devops_token, azure_devops_org_url
 ✓ Root agent loaded: AQEE_Orchestrator
 ✓ Model: gemini-3-flash
-✓ Sub-agents count: 7
+✓ Sub-agents count: 22
 ✓ Sub-agents:
-  - Requirement_Architect
-  - Project_Planner
-  - TestCase_Designer
-  - Test_Executor
-  - Report_Generator
-  - Issue_Tracker
-  - Resource_Planner
+    - Requirement_Analyst
+    - Story_Architect
+    - AcceptanceCriteria_Manager
+    - DevOps_Linker
+    - TestPlan_Designer
+    - TestCase_Author
+    - Coverage_Analyst
+    - TestData_Engineer
+    - Suite_Organizer
+    - UI_Framework_Designer
+    - API_Framework_Designer
+    - CI_CD_Designer
+    - Execution_Strategy_Designer
+    - Environment_Manager
+    - Project_Planner
+    - TestCase_Designer (compat)
+    - Test_Automation_Designer (compat)
+    - Test_Executor
+    - Report_Generator
+    - Issue_Tracker
+    - Resource_Planner
 ✓ Tools count: 1
 
 ✅ All agents loaded successfully!
@@ -398,6 +431,18 @@ adk web
 AQEE learns and improves through:
 - **Metrics tracking** - What worked, what didn't
 - **Pattern recognition** - AI identifies QA trends
+
+---
+
+## 🆕 Recent changes
+
+- Split large agents into smaller, focused specialists (architect, designer, test_automation_designer).
+- Added compatibility wrappers `designer.py` and `architect.py` that delegate to specialized agents and aggregate outputs.
+- Wired compatibility wrappers to use the ADK `agent.call(prompt, context)` signature with safe fallbacks.
+- Added unit tests for credential management and Azure DevOps client in `tests/`.
+- Updated project exports and root orchestrator to register all new agents.
+
+For full details, see commit history and the `AGENT_ENHANCEMENTS.md` and `DESIGNER_EDGE_CASES.md` documents.
 - **Feedback loops** - Integration with team insights
 - **Process optimization** - Agent recommendations
 - **Cost analysis** - Automation ROI tracking
